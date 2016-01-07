@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ParallaxListView">
-        <attr name="divider_color" format="color"/>
-        <attr name="divider_height" format="dimension"/>
-        <attr name="parallax_factor" format="float"/>
-        <attr name="header_height" format="dimension"/>
+        <attr name="dividerColor" format="color"/>
+        <attr name="dividerHeight" format="dimension"/>
+        <attr name="parallaxFactor" format="float"/>
+        <attr name="headerHeight" format="dimension"/>
     </declare-styleable>
 </resources>

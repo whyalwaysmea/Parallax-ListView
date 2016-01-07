@@ -1,11 +1,11 @@
 package com.ithaha.parallaxlistview;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -19,45 +19,35 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 /**
- * 头部会跟随缩小的ListView，并且带有下拉刷新
- * 下拉刷新使用的是 SwipeRefreshLayout
- * Created by Administrator on 2015/12/28.
+ * 不带下拉刷新
  */
-public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
+public class ParallaxListView extends FrameLayout implements AbsListView.OnScrollListener {
 
     private ScrollView mScrollView;
     private LinearLayout mBackgroundLayout;
-    // 头部的View
-    private LinearLayout mHeaderView;
-
     private ImageView mHeaderImage;
-
-    // 头部View的高度
     private int mHeaderHeight;
-    // ListView
-    private ListView mListView;
-    // ListView的Apapter
-    private BaseAdapter adapter;
-    // 空白的View
-    protected View mTransparentHeader;
-    // 缩小的比例
-    private float mParallaxFactor = 2;
-    // 下拉刷新
-    private SwipeRefreshLayout swipeRefresh;
-    private int dividerHeight;
-    private int dividerColor;
 
-    public ParallaxListViewWithRefresh(Context context) {
+    private ListView mListView;
+    private View mTransparentHeader;
+
+    private float mParallaxFactor = 2;
+
+    private BaseAdapter adapter;
+    private int dividerColor;
+    private int dividerHeight;
+
+    public ParallaxListView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ParallaxListViewWithRefresh(Context context, AttributeSet attrs) {
+    public ParallaxListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ParallaxListViewWithRefresh(Context context, AttributeSet attrs, int defStyle) {
+    public ParallaxListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
@@ -65,28 +55,31 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
     private void init(Context context, AttributeSet attrs) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         if (dm.heightPixels > dm.widthPixels) {
-            mHeaderHeight = dm.widthPixels;
+            mHeaderHeight = context.getResources().getDisplayMetrics().widthPixels;
         } else {
-            mHeaderHeight = (int) (dm.heightPixels / 2f);
+            mHeaderHeight = (int) (context.getResources().getDisplayMetrics().heightPixels / 2f);
         }
 
-        // 获取自定义属性中值
         if (attrs != null) {
             TypedArray a = context
-                    .obtainStyledAttributes(attrs, R.styleable.ParallaxListView);
-            if (a != null) {
+                    .obtainStyledAttributes(attrs, R.styleable.ParallaxListView, 0, 0);
+            Resources res = getResources();
+            if (a != null && res != null) {
                 try {
                     dividerColor = a.getColor(
                             R.styleable.ParallaxListView_dividerColor, Color.WHITE);
 
+
                     dividerHeight = a.getDimensionPixelSize(
                             R.styleable.ParallaxListView_dividerHeight, 1);
+
 
                     mHeaderHeight = a.getDimensionPixelSize(
                             R.styleable.ParallaxListView_headerHeight, mHeaderHeight);
 
                     mParallaxFactor = a.getFloat(
                             R.styleable.ParallaxListView_parallaxFactor, 2);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -95,9 +88,9 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
             }
         }
 
-
         mScrollView = new ScrollView(context);
-        mScrollView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeaderHeight));
+        mScrollView.setLayoutParams(new LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, mHeaderHeight));
         mScrollView.setVerticalScrollBarEnabled(false);
         addView(mScrollView);
 
@@ -107,22 +100,16 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
         mBackgroundLayout.setOrientation(LinearLayout.VERTICAL);
         mScrollView.addView(mBackgroundLayout);
 
-        mHeaderView = new LinearLayout(context);
-        mHeaderView.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, mHeaderHeight));
-        mBackgroundLayout.addView(mHeaderView);
-
         mHeaderImage = new ImageView(context);
         mHeaderImage.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, mHeaderHeight));
         mHeaderImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        mHeaderView.addView(mHeaderImage);
+        mBackgroundLayout.addView(mHeaderImage);
 
         mListView = new ListView(context);
         mListView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mListView.setOnScrollListener(this);
-        // ListView属性设置
         mListView.setDivider(new ColorDrawable(dividerColor));
         mListView.setDividerHeight(dividerHeight);
         addView(mListView);
@@ -132,16 +119,12 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
         mTransparentHeader.setLayoutParams(new AbsListView.LayoutParams(
                 AbsListView.LayoutParams.MATCH_PARENT, mHeaderHeight));
 
+
     }
 
     public void setAdapter(BaseAdapter adapter) {
         this.adapter = adapter;
         mListView.setAdapter(new ActualAdapter());
-    }
-
-    public void setHeaderView(View view) {
-        mHeaderView.removeAllViews();
-        mHeaderView.addView(view);
     }
 
     public void setHeaderDrawable(Drawable drawable) {
@@ -151,38 +134,16 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
     @Override public void onScrollStateChanged(AbsListView absListView, int i) {
     }
 
+    @Override public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                   int visibleItemCount, int totalItemCount) {
 
-    // 滑动的处理
-    @Override
-    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         View firstChild = absListView.getChildAt(0);
         if (firstChild != null) {
-            // When HeaderView is visible
             if (firstChild == mTransparentHeader) {
-                // Top position of this view relative to its parent.
                 int scrollY = -firstChild.getTop();
-
-                if(scrollY == 0) {
-                    if(swipeRefresh == null) {
-                        swipeRefresh = (SwipeRefreshLayout) getParent();
-                    }
-                    swipeRefresh.setEnabled(true);
-                } else {
-                    if(swipeRefresh == null) {
-                        swipeRefresh = (SwipeRefreshLayout) getParent();
-                    }
-                    swipeRefresh.setEnabled(false);
-                }
-                if(swipeRefresh != null) {
-                    swipeRefresh.setOnRefreshListener(this);
-                }
-
-                // The amount that the view is scaled in y around the pivot point, as a proportion of the view's unscaled height.
                 if (mScrollView.getScrollY() != scrollY) {
-                    // move mScrollView
                     mScrollView.scrollTo(0, (int) (scrollY / mParallaxFactor));
 
-                    // change mScrollView height
                     ViewGroup.LayoutParams lp = mScrollView.getLayoutParams();
                     lp.height = mHeaderHeight - scrollY;
                     mScrollView.setLayoutParams(lp);
@@ -193,34 +154,8 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
                 ViewGroup.LayoutParams lp = mScrollView.getLayoutParams();
                 lp.height = 0;
                 mScrollView.setLayoutParams(lp);
-
-                if(swipeRefresh == null) {
-                    swipeRefresh = (SwipeRefreshLayout) getParent();
-                }
-                swipeRefresh.setEnabled(false);
             }
         }
-    }
-
-    @Override
-    public void onRefresh() {
-        if(onMyRefreshListener != null) {
-            onMyRefreshListener.onRefresh();
-        }
-    }
-
-    interface OnMyRefreshListener {
-        void onRefresh();
-    }
-
-    private OnMyRefreshListener onMyRefreshListener;
-
-    public OnMyRefreshListener getOnMyRefreshListener() {
-        return onMyRefreshListener;
-    }
-
-    public void setOnMyRefreshListener(OnMyRefreshListener onMyRefreshListener) {
-        this.onMyRefreshListener = onMyRefreshListener;
     }
 
     private class ActualAdapter extends BaseAdapter {
@@ -249,6 +184,4 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
             return adapter.getView(pos - 1, view, viewGroup);
         }
     }
-
-
 }
