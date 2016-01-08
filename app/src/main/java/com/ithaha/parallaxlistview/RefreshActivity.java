@@ -1,7 +1,7 @@
 package com.ithaha.parallaxlistview;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RefreshActivity extends AppCompatActivity  {
+public class RefreshActivity extends Activity {
 
     private static String[] sSongList = new String[] {
             "Mozart's House", "Extraordinary", "Dust Clears", "Rather Be", "A+E", "Come Over",

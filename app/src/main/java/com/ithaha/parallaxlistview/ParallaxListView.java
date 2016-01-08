@@ -131,6 +131,11 @@ public class ParallaxListView extends FrameLayout implements AbsListView.OnScrol
         mHeaderImage.setImageDrawable(drawable);
     }
 
+    public void setHeaderView(View view) {
+        mBackgroundLayout.removeAllViews();
+        mBackgroundLayout.addView(view);
+    }
+
     @Override public void onScrollStateChanged(AbsListView absListView, int i) {
     }
 
@@ -184,4 +189,11 @@ public class ParallaxListView extends FrameLayout implements AbsListView.OnScrol
             return adapter.getView(pos - 1, view, viewGroup);
         }
     }
+
+    public ListView getListView() {
+        return mListView;
+    }
+
+
+
 }

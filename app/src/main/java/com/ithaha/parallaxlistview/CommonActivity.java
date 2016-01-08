@@ -1,14 +1,15 @@
 package com.ithaha.parallaxlistview;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class CommonActivity extends AppCompatActivity  {
+public class CommonActivity extends Activity {
 
     private static String[] sSongList = new String[] {
             "Mozart's House", "Extraordinary", "Dust Clears", "Rather Be", "A+E", "Come Over",
@@ -28,6 +29,13 @@ public class CommonActivity extends AppCompatActivity  {
 
         mParallaxListView.setHeaderDrawable(
                 getResources().getDrawable(R.mipmap.header));
+
+        mParallaxListView.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("position == " + position);
+            }
+        });
 
     }
 
