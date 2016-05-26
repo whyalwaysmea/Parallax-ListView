@@ -1,4 +1,5 @@
 # Parallax-ListView
-Parallax List . include ListView, RecyclerView, ScrollView
 
 different parallax list
+
+![image](https://github.com/whyalwaysmea/Parallax-ListView/raw/master/screenshots/recyclerview.git)
