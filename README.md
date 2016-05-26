@@ -7,3 +7,4 @@ different parallax list
 ![RecyclerView](http://i2.buimg.com/f6e55523f3fefce8.gif)
 
 ![ListView](http://i2.buimg.com/b432adb7fd939191.gif)
+
