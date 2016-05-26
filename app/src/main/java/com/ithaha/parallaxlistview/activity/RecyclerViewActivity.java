@@ -1,4 +1,4 @@
-package com.ithaha.parallaxlistview.recyclerview;
+package com.ithaha.parallaxlistview.activity;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;

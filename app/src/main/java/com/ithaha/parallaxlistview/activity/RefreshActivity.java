@@ -1,15 +1,19 @@
-package com.ithaha.parallaxlistview;
+package com.ithaha.parallaxlistview.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class CommonActivity extends Activity {
+import com.ithaha.parallaxlistview.ParallaxListViewWithRefresh;
+import com.ithaha.parallaxlistview.R;
+
+public class RefreshActivity extends Activity {
 
     private static String[] sSongList = new String[] {
             "Mozart's House", "Extraordinary", "Dust Clears", "Rather Be", "A+E", "Come Over",
@@ -17,25 +21,28 @@ public class CommonActivity extends Activity {
             "Outro Movement III", "Rihanna", "UK Shanty", "Nightingale"
     };
 
-    private ParallaxListView mParallaxListView;
+    private ParallaxListViewWithRefresh mParallaxListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common);
+        setContentView(R.layout.activity_refresh);
 
-        mParallaxListView = (ParallaxListView) findViewById(R.id.parallax_listview);
+        mParallaxListView = (ParallaxListViewWithRefresh) findViewById(R.id.parallax_listview);
         mParallaxListView.setAdapter(new ListAdapter());
 
-        mParallaxListView.setHeaderDrawable(
-                getResources().getDrawable(R.mipmap.header));
+        LinearLayout headerView = (LinearLayout) this.getLayoutInflater().inflate(R.layout.header_view, null);
+        mParallaxListView.setHeaderView(headerView);
 
-        mParallaxListView.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mParallaxListView.setOnMyRefreshListener(new ParallaxListViewWithRefresh.OnMyRefreshListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("position == " + position);
+            public void onRefresh() {
+                Toast.makeText(RefreshActivity.this, "刷新...", Toast.LENGTH_SHORT).show();
+
             }
         });
+
+        mParallaxListView.setHeaderDrawable(getResources().getDrawable(R.mipmap.header));
 
     }
 

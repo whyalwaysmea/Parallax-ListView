@@ -205,7 +205,7 @@ public class ParallaxListViewWithRefresh extends FrameLayout implements AbsListV
 	}
 
 	// 下拉刷新的回调接口
-	interface OnMyRefreshListener {
+	public interface OnMyRefreshListener {
 		void onRefresh();
 	}
 

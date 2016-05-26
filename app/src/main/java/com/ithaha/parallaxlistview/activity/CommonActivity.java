@@ -1,4 +1,4 @@
-package com.ithaha.parallaxlistview;
+package com.ithaha.parallaxlistview.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,11 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class RefreshActivity extends Activity {
+import com.ithaha.parallaxlistview.ParallaxListView;
+import com.ithaha.parallaxlistview.R;
+
+public class CommonActivity extends Activity {
 
     private static String[] sSongList = new String[] {
             "Mozart's House", "Extraordinary", "Dust Clears", "Rather Be", "A+E", "Come Over",
@@ -18,27 +19,18 @@ public class RefreshActivity extends Activity {
             "Outro Movement III", "Rihanna", "UK Shanty", "Nightingale"
     };
 
-    private ParallaxListViewWithRefresh mParallaxListView;
+    private ParallaxListView mParallaxListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_refresh);
+        setContentView(R.layout.activity_common);
 
-        mParallaxListView = (ParallaxListViewWithRefresh) findViewById(R.id.parallax_listview);
+        mParallaxListView = (ParallaxListView) findViewById(R.id.parallax_listview);
         mParallaxListView.setAdapter(new ListAdapter());
 
-        LinearLayout headerView = (LinearLayout) this.getLayoutInflater().inflate(R.layout.header_view, null);
-        mParallaxListView.setHeaderView(headerView);
-
-        mParallaxListView.setOnMyRefreshListener(new ParallaxListViewWithRefresh.OnMyRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(RefreshActivity.this, "刷新...", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-//        mParallaxListView.setHeaderDrawable(getResources().getDrawable(R.mipmap.header));
+        mParallaxListView.setHeaderDrawable(
+                getResources().getDrawable(R.mipmap.header));
 
     }
 
